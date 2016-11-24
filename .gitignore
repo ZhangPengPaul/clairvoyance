@@ -23,4 +23,7 @@ dist/
 nbdist/
 .nb-gradle/
 
+### PlayFramework ###
 documentation/*
+tmp/*
+modules/*
