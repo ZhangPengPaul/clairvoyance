@@ -1,0 +1,60 @@
+#{extends 'main.html' /}
+#{set title:'我的项目' /}
+<link rel="stylesheet" media="screen" href="@{'/public/libs/css/bootstrap.min.css'}">
+<link rel="stylesheet" media="screen" href="@{'/public/libs/css/bootstrap-theme.min.css'}">
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"
+        charset="${_response_encoding}"></script>
+<script src="@{'/public/libs/js/bootstrap.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+
+<div class="container-fluid" style="margin:60px 0 0 0">
+    <div style="margin:0 0 30px 0">
+        我的项目
+    </div>
+    <div style="margin:0 0 10px 0">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+            新增项目
+        </button>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid span12">
+
+    #{list projectList,as:'project'}
+        <div class="col-md-2" style="width:180px;height:180px; border:solid 1px #336699;margin:0 20px 10px 0">
+            <div style="height:150px">
+                <label><h3>${project.name}</h3></label>
+                <p>${project.describe}</p>
+            </div>
+            <div><a href="/condition?projectId=${project.id}">详情</a></div>
+        </div>
+    #{/list}
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" style="text-align:center">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin:100px auto;width: 400px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title">新增项目</h4>
+            </div>
+            <form action="/project/save" method="post">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <input type="text" name="name" class="col-lg-8" placeholder="项目名">
+                    </div>
+                    <div class="row">
+                        <textarea rows="3" name="describe" class="col-lg-10" placeholder="描述"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
