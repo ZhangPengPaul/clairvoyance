@@ -6,13 +6,20 @@
 
 <div class="container-fluid" style="margin:60px 0 0 0">
     <div style="margin:0 0 30px 0">
-        我的项目
+        <h3>${project.name}</h3>
     </div>
     <div style="margin:0 0 10px 0">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
             新增状态码
         </button>
     </div>
+#{ifErrors }
+    <div class="alert alert-error" id="alert" style="width: 50%">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>oh no！</strong> #{errors }
+        <li>${error}</li> #{/errors}
+    </div>
+#{/ifErrors}
 </div>
 <div class="container-fluid">
     <table class="table table-bordered">
@@ -29,9 +36,11 @@
             <td>${condition.code}</td>
             <td>${condition.describe}</td>
             <td width="10%">
-                <button id="edit" class="btn btn-default" onclick="edit('${condition.id}');" data-toggle="modal" data-target="#myModal">编辑
+                <button id="edit" class="btn btn-default" onclick="edit('${condition.id}');" data-toggle="modal"
+                        data-target="#myModal">编辑
                 </button>
-                <a id="delete" class="btn btn-default" href="/condition/delete?id=${condition.id}&projectId=${projectId}">删除</a>
+                <a id="delete" class="btn btn-default"
+                   href="/condition/delete?id=${condition.id}&projectId=${projectId}">删除</a>
             </td>
         </tr>
         #{/list}
@@ -65,7 +74,7 @@
                     <input type="hidden" name="projectId" value="${projectId}">
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-info">保存</button>
+                    <button type="submit" onclick="return check();" class="btn btn-info">保存</button>
                 </div>
             </form>
         </div>
@@ -90,6 +99,14 @@
                 alert(error);
             }
         });
+    }
+
+    function check() {
+        if ($("#code").val().length < 1) {
+            alert("状态码不能为空！");
+            return false;
+        }
+        return true;
     }
 
 </script>
