@@ -2,15 +2,15 @@ package es;
 
 import com.google.gson.*;
 import es.common.ElasticClient;
-import es.po.AggsPo;
-import es.po.TestPo;
+import es.common.Result;
 import io.searchbox.client.JestResult;
+import models.es.AggsResult;
+import models.es.ProjectDoc;
 import org.junit.Test;
 import play.test.UnitTest;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -19,11 +19,10 @@ public class TestOptionES extends UnitTest {
     @Test
     public void testInsert() {
         for (int i = 0; i < 20; i++) {
-            TestPo test = new TestPo();
+            ProjectDoc test = new ProjectDoc();
             test.setId(i + "");
             test.setCode("000" + i);
-            test.setMessage("testMessage=" + i);
-            test.setCtime(new Date());
+            test.setDescribe("testMessage=" + i);
             if (i % 3 == 0) {
                 test.setProject("Project0");
             } else if (i % 3 == 1) {
@@ -50,7 +49,7 @@ public class TestOptionES extends UnitTest {
     @Test
     public void testGet() {
         JestResult result = ElasticClient.getDocument("testId", "test_index", "test");
-        TestPo po = result.getSourceAsObject(TestPo.class);
+        ProjectDoc po = result.getSourceAsObject(ProjectDoc.class);
         if (po != null) {
             System.out.println(po.toString());
         }
@@ -75,26 +74,29 @@ public class TestOptionES extends UnitTest {
             Gson gson = new GsonBuilder().setExclusionStrategies(myExclusionStrategy).create();
 
             JsonObject result = ElasticClient.searchByAggs("project", 1, 10, "test_index", "test");
-
             JsonArray asJsonArray = (JsonArray) result.get("result");
-            List<TestPo> poList = new ArrayList<>();
+            List<ProjectDoc> poList = new ArrayList<>();
             JsonObject json;
             JsonObject source;
             for (JsonElement element : asJsonArray) {
                 source = element.getAsJsonObject().getAsJsonObject("_source");
-                TestPo po = gson.fromJson(source, TestPo.class);
+                ProjectDoc po = gson.fromJson(source, ProjectDoc.class);
                 poList.add(po);
             }
 
-            List<AggsPo> aggsPoList = new ArrayList<>();
+            List<AggsResult> aggsPoList = new ArrayList<>();
             JsonArray aggsJsonArray = (JsonArray) result.get("aggs");
             for (JsonElement element : aggsJsonArray) {
-                AggsPo aggsPo = gson.fromJson(element, AggsPo.class);
+                AggsResult aggsPo = gson.fromJson(element, AggsResult.class);
                 aggsPoList.add(aggsPo);
             }
 
-            System.out.println(11);
 
+            Result searchResult = new Result();
+            searchResult.setAggs(aggsPoList);
+            searchResult.setProjectDocs(poList);
+
+            System.out.println(11);
         } catch (IOException e) {
             e.printStackTrace();
         }
