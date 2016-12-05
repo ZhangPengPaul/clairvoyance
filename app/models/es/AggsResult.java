@@ -1,4 +1,4 @@
-package es.po;
+package models.es;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.Data;
  * @Description: 注释写这里
  ******************************************/
 @Data
-public class AggsPo {
+public class AggsResult {
     @SerializedName("key")
     private String projectName;
     @SerializedName("doc_count")
