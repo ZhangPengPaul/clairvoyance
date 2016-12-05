@@ -7,9 +7,19 @@ GET     /                                       Application.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
+GET     /404                                    404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
+GET     /condition                              ProjectController.condition
+POST    /condition/save                         ProjectController.codeSave
+POST    /condition/getCondition                 ProjectController.getCondition
+GET     /condition/delete                       ProjectController.delete
+
+GET     /project                                ProjectController.project
+POST    /project/save                           ProjectController.save
+
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
+
