@@ -5,6 +5,9 @@
 # Home page
 GET     /                                       Application.index
 
+# account
+GET     /toLogin                                AccountController.toLogin
+GET     /toRegister                             AccountController.toRegister
 # Ignore favicon requests
 GET     /favicon.ico                            404
 GET     /404                                    404
