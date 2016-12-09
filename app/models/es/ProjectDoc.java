@@ -17,4 +17,14 @@ public class ProjectDoc {
     public String project;//项目
     public String code;//状态码
     public String describe;//描述
+
+    public ProjectDoc() {
+    }
+
+    public ProjectDoc(String id, String project, String code, String describe) {
+        this.id = id;
+        this.project = project;
+        this.code = code;
+        this.describe = describe;
+    }
 }

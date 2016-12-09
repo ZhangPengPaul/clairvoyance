@@ -39,15 +39,8 @@ public class ProjectController extends Controller {
      * @param id
      */
     public static void codeSave(String code, String describe, String projectId, String id) {
-        if (StringUtils.isNotEmpty(id)) {
-            Condition condition = Condition.findById(id);
-            condition.code = code;
-            condition.describe = describe;
-            condition.save();
-        } else {
-            if (StringUtils.isNotEmpty(projectId) && StringUtils.isNotEmpty(code)) {
-                Condition.saveCondition(code, describe, projectId);
-            }
+        if (StringUtils.isNotEmpty(projectId) && StringUtils.isNotEmpty(code)) {
+            Condition.saveCondition(id, code, describe, projectId);
         }
         condition(projectId);
     }

@@ -2,6 +2,8 @@ package models;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
+import es.common.ElasticClient;
+import models.es.ProjectDoc;
 import org.apache.commons.lang.StringUtils;
 import play.modules.morphia.Model;
 
@@ -31,9 +33,19 @@ public class Condition extends Model {
         this.project = Project.findById(projectId);
     }
 
-    public static void saveCondition(String code, String describe, String projectId) {
-        Condition condition = new Condition(code, describe, projectId);
-        condition.save();
+    public static void saveCondition(String id, String code, String describe, String projectId) {
+        if (StringUtils.isNotEmpty(id)) {
+            Condition condition = Condition.findById(id);
+            condition.code = code;
+            condition.describe = describe;
+            condition.save();
+            ElasticClient.updateDocuments(id, "", "index", "condition");
+        } else {
+            Condition condition = new Condition(code, describe, projectId);
+            condition.save();
+            ProjectDoc projectDoc = new ProjectDoc(String.valueOf(condition.getId()), condition.project.name, condition.code, condition.describe);
+            ElasticClient.createDocuments(projectDoc, "index", "condition");
+        }
     }
 
     public static List<Condition> getConditionListByProject(String projectId) {
@@ -57,5 +69,6 @@ public class Condition extends Model {
 
     public static void deleteById(String id) {
         Condition.findById(id).delete();
+        ElasticClient.deleltDocuments(id, "index", "condition");
     }
 }
